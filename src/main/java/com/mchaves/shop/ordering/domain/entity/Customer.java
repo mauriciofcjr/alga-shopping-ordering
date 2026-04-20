@@ -4,13 +4,6 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
 public class Customer {
 
     private UUID id;
@@ -24,5 +17,130 @@ public class Customer {
     private OffsetDateTime registeredAt;
     private OffsetDateTime archivedAt;
     private Integer loyaltyPoints;
+
+    public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
+            Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
+        this.id = id;
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.phone = phone;
+        this.document = document;
+        this.promotionNotificationsAllowed = promotionNotificationsAllowed;
+        this.registeredAt = registeredAt;
+    }
+
+    public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
+            Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt,
+            OffsetDateTime archivedAt, Integer loyaltyPoints) {
+        this.id = id;
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.phone = phone;
+        this.document = document;
+        this.promotionNotificationsAllowed = promotionNotificationsAllowed;
+        this.archived = archived;
+        this.registeredAt = registeredAt;
+        this.archivedAt = archivedAt;
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    public void addLoayltyPoints(Integer points) {
+
+    }
+
+    public void archive() {
+
+    }
+
+    public void enablePromotionNotifications() {
+        this.setPromotionNotificationsAllowed(true);
+    }
+
+    public void disablePromotionNotifications() {
+        this.setPromotionNotificationsAllowed(false);
+    }
+
+    public void changeName(String fullName) {
+        this.setFullName(fullName);
+    }
+
+    public void changeEmail(String email) {
+        this.setEmail(email);
+    }
+
+    public void changePhone(String phone) {
+        this.setPhone(phone);
+    }
+
+    private void setId(UUID id) {
+        this.id = id;
+    }
+
+    private void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    private void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    private void setEmail(String email) {
+        this.email = email;
+    }
+
+    private void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    private void setDocument(String document) {
+        this.document = document;
+    }
+
+    private void setPromotionNotificationsAllowed(Boolean promotionNotificationsAllowed) {
+        this.promotionNotificationsAllowed = promotionNotificationsAllowed;
+    }
+
+    private void setArchived(Boolean archived) {
+        this.archived = archived;
+    }
+
+    private void setRegisteredAt(OffsetDateTime registeredAt) {
+        this.registeredAt = registeredAt;
+    }
+
+    private void setArchivedAt(OffsetDateTime archivedAt) {
+        this.archivedAt = archivedAt;
+    }
+
+    private void setLoyaltyPoints(Integer loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Customer other = (Customer) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
 }
