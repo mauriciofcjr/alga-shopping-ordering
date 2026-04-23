@@ -19,7 +19,7 @@ public class Customer {
     private Integer loyaltyPoints;
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
-            Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
+                    Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -31,8 +31,8 @@ public class Customer {
     }
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
-            Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt,
-            OffsetDateTime archivedAt, Integer loyaltyPoints) {
+                    Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt,
+                    OffsetDateTime archivedAt, Integer loyaltyPoints) {
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -72,6 +72,50 @@ public class Customer {
 
     public void changePhone(String phone) {
         this.setPhone(phone);
+    }
+
+    public UUID id() {
+        return id;
+    }
+
+    public String fullName() {
+        return fullName;
+    }
+
+    public LocalDate birthDate() {
+        return birthDate;
+    }
+
+    public String email() {
+        return email;
+    }
+
+    public String phone() {
+        return phone;
+    }
+
+    public String document() {
+        return document;
+    }
+
+    public Boolean isPromotionNotificationsAllowed() {
+        return promotionNotificationsAllowed;
+    }
+
+    public Boolean isArchived() {
+        return archived;
+    }
+
+    public OffsetDateTime registeredAt() {
+        return registeredAt;
+    }
+
+    public OffsetDateTime archivedAt() {
+        return archivedAt;
+    }
+
+    public Integer loyaltyPoints() {
+        return loyaltyPoints;
     }
 
     private void setId(UUID id) {
