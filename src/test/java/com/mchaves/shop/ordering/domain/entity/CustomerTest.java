@@ -1,14 +1,17 @@
 package com.mchaves.shop.ordering.domain.entity;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.mchaves.shop.ordering.domain.utility.IdGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.mchaves.shop.ordering.domain.utility.IdGenerator;
 
 public class CustomerTest {
 
@@ -104,5 +107,28 @@ public class CustomerTest {
         } catch (ReflectiveOperationException e) {
             throw new AssertionError("Could not read field: " + fieldName, e);
         }
+    }
+
+    @Test
+    void given_unarchivedCustomer_whenArchive_shouldAnonymize() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBaseUUID(),
+                "John Doe",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                OffsetDateTime.now());
+
+        customer.archive();
+
+        Assertions.assertAll(
+                () -> assertThat(customer.fullName()).isEqualTo("Anonymous"),
+                () -> assertThat(customer.email()).isNotEqualTo("john.doe@gmail.com"),
+                () -> assertThat(customer.phone()).isEqualTo("000-000-0000"),
+                () -> assertThat(customer.document()).isEqualTo("000-00-0000"),
+                () -> assertThat(customer.birthDate()).isNull());
+
     }
 }
