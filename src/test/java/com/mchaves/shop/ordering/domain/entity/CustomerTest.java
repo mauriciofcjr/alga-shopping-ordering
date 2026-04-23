@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.mchaves.shop.ordering.domain.utility.IdGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ public class CustomerTest {
     private Customer createRandomCustomer() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
-        UUID id = UUID.randomUUID();
+        UUID id = IdGenerator.generateTimeBaseUUID();
         String fullName = "Customer " + random.nextInt(1_000, 9_999);
         LocalDate birthDate = LocalDate.now().minusDays(random.nextLong(6_000, 20_000));
         String email = "customer" + random.nextInt(1_000, 9_999) + "@mail.com";
