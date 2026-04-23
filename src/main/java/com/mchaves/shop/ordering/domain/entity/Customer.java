@@ -1,11 +1,12 @@
 package com.mchaves.shop.ordering.domain.entity;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
+
+import com.mchaves.shop.ordering.domain.exception.ErrorMessages;
+import com.mchaves.shop.ordering.domain.validator.FieldValidations;
 
 public class Customer {
 
@@ -22,7 +23,7 @@ public class Customer {
     private Integer loyaltyPoints;
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
-                    Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
+            Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -36,8 +37,8 @@ public class Customer {
     }
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
-                    Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt,
-                    OffsetDateTime archivedAt, Integer loyaltyPoints) {
+            Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt,
+            OffsetDateTime archivedAt, Integer loyaltyPoints) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -130,9 +131,9 @@ public class Customer {
 
     private void setFullName(String fullName) {
 
-        Objects.requireNonNull(fullName);
+        Objects.requireNonNull(fullName, ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_NULL);
         if (fullName.isBlank()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_BLANK);
         }
         this.fullName = fullName;
     }
@@ -143,19 +144,13 @@ public class Customer {
             return;
         }
         if (birthDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessages.VALIDATION_ERROR_BIRTHDATE_MUST_IN_PAST);
         }
         this.birthDate = birthDate;
     }
 
     private void setEmail(String email) {
-        Objects.requireNonNull(email);
-        if (email.isBlank()) {
-            throw new IllegalArgumentException();
-        }
-        if (EmailValidator.getInstance().isValid(email)) {
-            throw new IllegalArgumentException();
-        }
+        FieldValidations.requiresValidEmail(email, ErrorMessages.VALIDATION_ERROR_EMAIL_IS_INVALID);
         this.email = email;
     }
 
