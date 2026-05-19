@@ -164,8 +164,8 @@ public class CustomerTest {
                 false,
                 OffsetDateTime.now());
 
-        customer.addLoayltyPoints(10);
-        customer.addLoayltyPoints(20);
+        customer.addLoyaltyPoints(10);
+        customer.addLoyaltyPoints(20);
 
         assertThat(customer.loyaltyPoints()).isEqualTo(30);
 
@@ -184,9 +184,9 @@ public class CustomerTest {
                 false,
                 OffsetDateTime.now());
 
-        customer.addLoayltyPoints(10);
+        customer.addLoyaltyPoints(10);
 
-         assertThrows(IllegalArgumentException.class, () -> customer.addLoayltyPoints(-1));
+         assertThrows(IllegalArgumentException.class, () -> customer.addLoyaltyPoints(-1));
 
     }
 }
