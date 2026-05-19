@@ -150,4 +150,43 @@ public class CustomerTest {
         assertThrows(CustomerArchivedException.class, () -> customer.disablePromotionNotifications());
 
     }
+
+    @Test
+    void given_brandNewCustomer_whenAddLoyaltyPoints_shouldSumPoints() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBaseUUID(),
+                "Anonymous",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                false,
+                OffsetDateTime.now());
+
+        customer.addLoayltyPoints(10);
+        customer.addLoayltyPoints(20);
+
+        assertThat(customer.loyaltyPoints()).isEqualTo(30);
+
+    }
+
+     @Test
+    void given_brandNewCustomer_whenAddLoyaltyPoints_shouldNegativePoints() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBaseUUID(),
+                "Anonymous",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                false,
+                OffsetDateTime.now());
+
+        customer.addLoayltyPoints(10);
+
+         assertThrows(IllegalArgumentException.class, () -> customer.addLoayltyPoints(-1));
+
+    }
 }
