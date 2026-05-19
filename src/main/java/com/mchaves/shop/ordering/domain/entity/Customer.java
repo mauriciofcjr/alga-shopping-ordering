@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.mchaves.shop.ordering.domain.exception.CustomerArchivedException;
 import com.mchaves.shop.ordering.domain.exception.ErrorMessages;
 import com.mchaves.shop.ordering.domain.validator.FieldValidations;
 
@@ -23,7 +24,7 @@ public class Customer {
     private Integer loyaltyPoints;
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone, String document,
-            Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
+            Boolean promotionNotificationsAllowed, Boolean archived, OffsetDateTime registeredAt) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -32,7 +33,7 @@ public class Customer {
         this.setDocument(document);
         this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
         this.setRegisteredAt(registeredAt);
-        this.setArchived(false);
+        this.setArchived(archived);
         this.setLoyaltyPoints(0);
     }
 
@@ -57,6 +58,7 @@ public class Customer {
     }
 
     public void archive() {
+        verifyIfChangeable();
         this.setArchived(true);
         this.setArchivedAt(OffsetDateTime.now());
         this.setFullName("Anonymous");
@@ -64,26 +66,32 @@ public class Customer {
         this.setDocument("000-00-0000");
         this.setEmail(UUID.randomUUID() + "@anonymous.com");
         this.setBirthDate(null);
+        this.setPromotionNotificationsAllowed(false);
 
     }
 
     public void enablePromotionNotifications() {
+        verifyIfChangeable();
         this.setPromotionNotificationsAllowed(true);
     }
 
     public void disablePromotionNotifications() {
+        verifyIfChangeable();
         this.setPromotionNotificationsAllowed(false);
     }
 
     public void changeName(String fullName) {
+        verifyIfChangeable();
         this.setFullName(fullName);
     }
 
     public void changeEmail(String email) {
+        verifyIfChangeable();
         this.setEmail(email);
     }
 
     public void changePhone(String phone) {
+        verifyIfChangeable();
         this.setPhone(phone);
     }
 
@@ -134,6 +142,12 @@ public class Customer {
     private void setId(UUID id) {
         Objects.requireNonNull(id);
         this.id = id;
+    }
+
+    private void verifyIfChangeable() {
+        if (this.isArchived()) {
+            throw new CustomerArchivedException();
+        }
     }
 
     private void setFullName(String fullName) {

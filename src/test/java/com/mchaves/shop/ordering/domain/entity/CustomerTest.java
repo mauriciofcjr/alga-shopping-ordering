@@ -1,6 +1,7 @@
 package com.mchaves.shop.ordering.domain.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.mchaves.shop.ordering.domain.exception.CustomerArchivedException;
 import com.mchaves.shop.ordering.domain.utility.IdGenerator;
 
 public class CustomerTest {
@@ -59,14 +61,6 @@ public class CustomerTest {
         Assertions.assertNotNull(readField(customer, "archived", Boolean.class));
         Assertions.assertNotNull(readField(customer, "registeredAt", OffsetDateTime.class));
         Assertions.assertNotNull(readField(customer, "loyaltyPoints", Integer.class));
-    }
-
-    @Test
-    public void shouldThrowIllegalArgumentExceptionWhenChangingEmailWithInvalidValue() {
-        Customer customer = createRandomCustomer();
-
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> customer.changeEmail("invalid-email"));
     }
 
     private Customer createRandomCustomer() {
@@ -119,6 +113,7 @@ public class CustomerTest {
                 "478-256-2504",
                 "255-08-0578",
                 false,
+                false,
                 OffsetDateTime.now());
 
         customer.archive();
@@ -129,6 +124,30 @@ public class CustomerTest {
                 () -> assertThat(customer.phone()).isEqualTo("000-000-0000"),
                 () -> assertThat(customer.document()).isEqualTo("000-00-0000"),
                 () -> assertThat(customer.birthDate()).isNull());
+
+    }
+
+    @Test
+    void given_archivedCustomer_whenTryToUpdate_shouldGenerationException() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBaseUUID(),
+                "Anonymous",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                false,
+                OffsetDateTime.now());
+
+        customer.archive();
+
+        assertThrows(CustomerArchivedException.class, customer::archive);
+        assertThrows(CustomerArchivedException.class, () -> customer.changeEmail("email@teste.com"));
+        assertThrows(CustomerArchivedException.class, () -> customer.changeName("mauricio"));
+        assertThrows(CustomerArchivedException.class, () -> customer.changePhone("0909090"));
+        assertThrows(CustomerArchivedException.class, () -> customer.enablePromotionNotifications());
+        assertThrows(CustomerArchivedException.class, () -> customer.disablePromotionNotifications());
 
     }
 }
